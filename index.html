@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Таро · Матрица Судьбы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<header class="app-header">
+  <h1 class="app-title">Тайный чертёж</h1>
+  <nav class="tabs" id="tabs">
+    <button class="tab is-active" data-tab="tarot">Таро</button>
+    <button class="tab" data-tab="matrix">Матрица судьбы</button>
+    <span class="tab-underline" id="tabUnderline"></span>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ===== TAROT ===== -->
+  <section id="tarot" class="screen is-active">
+    <p class="lede">Выбери расклад и сосредоточься на вопросе — карты покажут, куда смотреть дальше.</p>
+
+    <div class="spread-picker" id="spreadPicker">
+      <button class="chip is-active" data-spread="one_card">Карта дня</button>
+      <button class="chip" data-spread="three_cards">Прошлое · Настоящее · Будущее</button>
+      <button class="chip" data-spread="situation">Ситуация · Совет · Итог</button>
+      <button class="chip" data-spread="celtic_cross">Кельтский крест</button>
+    </div>
+
+    <button class="draw-button" id="drawButton">
+      <span class="draw-button-glyph">✦</span>
+      <span>Раскрыть карты</span>
+    </button>
+
+    <div class="cards-row" id="cardsRow"></div>
+  </section>
+
+  <!-- ===== MATRIX ===== -->
+  <section id="matrix" class="screen">
+    <p class="lede">Укажи дату рождения — построим схему из восьми точек и разберём каждую.</p>
+
+    <form class="date-form" id="dateForm">
+      <div class="field">
+        <label for="day">День</label>
+        <input type="number" id="day" min="1" max="31" placeholder="17" required>
+      </div>
+      <div class="field">
+        <label for="month">Месяц</label>
+        <input type="number" id="month" min="1" max="12" placeholder="04" required>
+      </div>
+      <div class="field">
+        <label for="year">Год</label>
+        <input type="number" id="year" min="1900" max="2026" placeholder="1994" required>
+      </div>
+      <button type="submit" class="draw-button matrix-submit">
+        <span class="draw-button-glyph">✧</span>
+        <span>Построить матрицу</span>
+      </button>
+    </form>
+
+    <div class="matrix-wrap" id="matrixWrap" hidden>
+      <svg id="octagram" viewBox="0 0 320 320" class="octagram"></svg>
+      <div class="point-detail" id="pointDetail">
+        <p class="point-detail-hint">Коснись точки на схеме, чтобы прочитать её значение.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
