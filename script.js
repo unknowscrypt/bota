@@ -27,7 +27,28 @@ const drawButton = document.getElementById("drawButton");
 const cardsRow = document.getElementById("cardsRow");
 const questionInput = document.getElementById("questionInput");
 const deckBadge = document.getElementById("deckBadge");
+const aiInterpretation = document.getElementById("aiInterpretation");
 let currentSpread = "one_card";
+
+const EXAMPLE_QUESTIONS = [
+  "Почему я не могу отпустить эти отношения?",
+  "Стоит ли мне менять работу прямо сейчас?",
+  "Что мешает мне двигаться дальше?",
+  "Получится ли у нас с ним/с ней?",
+  "Куда лучше вложить силы в ближайшее время?",
+  "Почему я снова чувствую тревогу без причины?",
+  "Что мне нужно понять про себя сейчас?",
+  "Стоит ли доверять этому человеку?",
+  "Что я упускаю в этой ситуации?",
+  "Как мне перестать бояться начинать заново?",
+];
+
+function setRandomPlaceholder() {
+  const q = EXAMPLE_QUESTIONS[Math.floor(Math.random() * EXAMPLE_QUESTIONS.length)];
+  questionInput.placeholder = `Например: ${q}`;
+}
+
+setRandomPlaceholder();
 
 spreadPicker.addEventListener("click", e => {
   const chip = e.target.closest(".chip");
@@ -41,6 +62,7 @@ drawButton.addEventListener("click", async () => {
   drawButton.disabled = true;
   cardsRow.innerHTML = "";
   deckBadge.hidden = true;
+  aiInterpretation.hidden = true;
   tg?.HapticFeedback?.impactOccurred("light");
   try {
     const q = encodeURIComponent(questionInput.value.trim());
@@ -68,10 +90,22 @@ drawButton.addEventListener("click", async () => {
         tg?.HapticFeedback?.impactOccurred("medium");
       }, 250 + i * 220);
     });
+
+    const revealDelay = 250 + data.cards.length * 220 + 400;
+    setTimeout(() => {
+      if (data.interpretation) {
+        aiInterpretation.hidden = false;
+        aiInterpretation.innerHTML = `
+          ${data.question ? `<p class="ai-interpretation-question">«${data.question}»</p>` : ""}
+          <p class="ai-interpretation-text">${data.interpretation}</p>`;
+        tg?.HapticFeedback?.notificationOccurred("success");
+      }
+    }, revealDelay);
   } catch (err) {
     cardsRow.innerHTML = `<p class="lede">Не удалось получить расклад. Проверь соединение и попробуй снова.</p>`;
   } finally {
     drawButton.disabled = false;
+    setRandomPlaceholder();
   }
 });
 

@@ -9,6 +9,8 @@ from pydantic import BaseModel
 from tarot_data import FULL_DECK, SPREADS, build_deck, DECK_NAMES
 from matrix import calculate_matrix, validate_date
 from classify import classify_question, pick_deck
+from ai_interpret import get_interpretation
+from summary import build_summary
 
 app = FastAPI(title="Tarot & Matrix API")
 
@@ -47,11 +49,17 @@ def draw_tarot(spread: str = "one_card", question: str = ""):
             "reversed": reversed_,
             "meaning": card["reversed"] if reversed_ else card["upright"],
         })
+    spread_name = SPREADS[spread]["name"]
+    interpretation = get_interpretation(question, DECK_NAMES[deck_style], spread_name, result) \
+        or build_summary(question, result)
+
     return {
-        "spread": SPREADS[spread]["name"],
+        "spread": spread_name,
         "deck": DECK_NAMES[deck_style],
         "category": category,
+        "question": question,
         "cards": result,
+        "interpretation": interpretation,
     }
 
 

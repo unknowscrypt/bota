@@ -134,6 +134,30 @@ main { position: relative; z-index: 1; }
   width: fit-content;
 }
 
+.ai-interpretation {
+  margin-top: 24px;
+  background: var(--panel);
+  border: 1px solid var(--gold-soft);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+
+.ai-interpretation-question {
+  font-family: 'Spectral', serif;
+  font-style: italic;
+  color: var(--gold);
+  font-size: 14.5px;
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+.ai-interpretation-text {
+  font-size: 14.5px;
+  line-height: 1.6;
+  margin: 0;
+  color: var(--text);
+}
+
 .spread-picker {
   display: flex;
   flex-wrap: wrap;
