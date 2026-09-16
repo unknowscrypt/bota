@@ -11,6 +11,7 @@ from matrix import calculate_matrix, validate_date
 from classify import classify_question, pick_deck
 from ai_interpret import get_interpretation
 from summary import build_summary
+from daily_forecast import build_daily_forecast
 
 app = FastAPI(title="Tarot & Matrix API")
 
@@ -60,6 +61,21 @@ def draw_tarot(spread: str = "one_card", question: str = ""):
         "question": question,
         "cards": result,
         "interpretation": interpretation,
+    }
+
+
+@app.get("/api/tarot/daily")
+def daily_card():
+    card = random.choice(FULL_DECK)
+    reversed_ = random.random() < 0.35
+    meaning = card["reversed"] if reversed_ else card["upright"]
+    forecast = build_daily_forecast(card["name"], meaning, reversed_)
+    return {
+        "card": card["name"],
+        "emoji": card["emoji"],
+        "reversed": reversed_,
+        "meaning": meaning,
+        "forecast": forecast,
     }
 
 

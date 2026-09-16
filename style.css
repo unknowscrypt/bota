@@ -241,6 +241,10 @@ main { position: relative; z-index: 1; }
   justify-content: center;
 }
 
+#dailyCardRow .tarot-card { width: min(280px, 80vw); }
+#dailyCardRow .tarot-card-inner { height: 300px; }
+#dailyCardRow .tarot-card-meaning { font-size: 13px; line-height: 1.55; }
+
 .tarot-card {
   width: 148px;
   perspective: 1000px;

@@ -60,9 +60,9 @@ dailyButton.addEventListener("click", async () => {
   dailyCardRow.innerHTML = "";
   tg?.HapticFeedback?.impactOccurred("light");
   try {
-    const res = await fetch(`${API}/api/tarot/draw?spread=one_card`);
-    const data = await res.json();
-    data.cards.forEach((c, i) => renderCard(dailyCardRow, c, i));
+    const res = await fetch(`${API}/api/tarot/daily`);
+    const c = await res.json();
+    renderCard(dailyCardRow, { ...c, position: "Сегодня", meaning: c.forecast }, 0);
   } catch (err) {
     dailyCardRow.innerHTML = `<p class="lede">Не удалось вытянуть карту. Попробуй ещё раз.</p>`;
   } finally {
