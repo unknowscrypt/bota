@@ -6,8 +6,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
-from tarot_data import FULL_DECK, SPREADS
+from tarot_data import FULL_DECK, SPREADS, build_deck, DECK_NAMES
 from matrix import calculate_matrix, validate_date
+from classify import classify_question, pick_deck
 
 app = FastAPI(title="Tarot & Matrix API")
 
@@ -26,11 +27,16 @@ def get_spreads():
 
 
 @app.get("/api/tarot/draw")
-def draw_tarot(spread: str = "one_card"):
+def draw_tarot(spread: str = "one_card", question: str = ""):
     if spread not in SPREADS:
         raise HTTPException(status_code=400, detail="Неизвестный расклад")
+
+    category = classify_question(question)
+    deck_style = pick_deck(category)
+    deck = build_deck(deck_style)
+
     count = len(SPREADS[spread]["positions"])
-    cards = random.sample(FULL_DECK, count)
+    cards = random.sample(deck, count)
     result = []
     for position, card in zip(SPREADS[spread]["positions"], cards):
         reversed_ = random.random() < 0.35
@@ -41,7 +47,12 @@ def draw_tarot(spread: str = "one_card"):
             "reversed": reversed_,
             "meaning": card["reversed"] if reversed_ else card["upright"],
         })
-    return {"spread": SPREADS[spread]["name"], "cards": result}
+    return {
+        "spread": SPREADS[spread]["name"],
+        "deck": DECK_NAMES[deck_style],
+        "category": category,
+        "cards": result,
+    }
 
 
 @app.post("/api/matrix/calculate")

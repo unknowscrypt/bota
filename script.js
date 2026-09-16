@@ -25,6 +25,8 @@ window.addEventListener("load", () => positionUnderline(document.querySelector("
 const spreadPicker = document.getElementById("spreadPicker");
 const drawButton = document.getElementById("drawButton");
 const cardsRow = document.getElementById("cardsRow");
+const questionInput = document.getElementById("questionInput");
+const deckBadge = document.getElementById("deckBadge");
 let currentSpread = "one_card";
 
 spreadPicker.addEventListener("click", e => {
@@ -38,10 +40,14 @@ spreadPicker.addEventListener("click", e => {
 drawButton.addEventListener("click", async () => {
   drawButton.disabled = true;
   cardsRow.innerHTML = "";
+  deckBadge.hidden = true;
   tg?.HapticFeedback?.impactOccurred("light");
   try {
-    const res = await fetch(`${API}/api/tarot/draw?spread=${currentSpread}`);
+    const q = encodeURIComponent(questionInput.value.trim());
+    const res = await fetch(`${API}/api/tarot/draw?spread=${currentSpread}&question=${q}`);
     const data = await res.json();
+    deckBadge.hidden = false;
+    deckBadge.textContent = `✦ ${data.deck}`;
     data.cards.forEach((c, i) => {
       const card = document.createElement("div");
       card.className = "tarot-card";

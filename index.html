@@ -26,7 +26,10 @@
 
   <!-- ===== TAROT ===== -->
   <section id="tarot" class="screen is-active">
-    <p class="lede">Выбери расклад и сосредоточься на вопросе — карты покажут, куда смотреть дальше.</p>
+    <p class="lede">Опиши свой вопрос — я подберу подходящую колоду под тему — и выбери расклад.</p>
+
+    <textarea class="question-input" id="questionInput" rows="2"
+      placeholder="Например: почему я не могу отпустить эти отношения?"></textarea>
 
     <div class="spread-picker" id="spreadPicker">
       <button class="chip is-active" data-spread="one_card">Карта дня</button>
@@ -40,6 +43,7 @@
       <span>Раскрыть карты</span>
     </button>
 
+    <div class="deck-badge" id="deckBadge" hidden></div>
     <div class="cards-row" id="cardsRow"></div>
   </section>
 

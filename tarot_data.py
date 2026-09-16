@@ -135,6 +135,30 @@ MINOR_ARCANA = _build_minor_arcana()
 
 FULL_DECK = MAJOR_ARCANA + MINOR_ARCANA  # 78 карт
 
+DECK_NAMES = {
+    "waite": "Таро Уэйта",
+    "moon": "Таро Безумной Луны",
+}
+
+
+def _wrap_minor_for_moon(card: dict) -> dict:
+    """Подаёт значение младшего аркана в более тёмном, интроспективном тоне."""
+    return {
+        **card,
+        "upright": f"Загляни глубже: {card['upright'][0].lower() + card['upright'][1:]}",
+        "reversed": f"Тень напоминает: {card['reversed'][0].lower() + card['reversed'][1:]}",
+    }
+
+
+def build_deck(style: str = "waite") -> list:
+    """Возвращает полную колоду (78 карт) в выбранном стиле трактовок."""
+    if style == "moon":
+        from moon_deck import MAJOR_ARCANA_MOON
+        majors = MAJOR_ARCANA_MOON
+        minors = [_wrap_minor_for_moon(c) for c in MINOR_ARCANA]
+        return majors + minors
+    return FULL_DECK
+
 SPREADS = {
     "one_card": {"name": "Карта дня", "positions": ["Совет на сегодня"]},
     "three_cards": {"name": "Прошлое – Настоящее – Будущее", "positions": ["Прошлое", "Настоящее", "Будущее"]},

@@ -103,6 +103,37 @@ main { position: relative; z-index: 1; }
 
 /* ---- Tarot ---- */
 
+.question-input {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 12px 14px;
+  resize: vertical;
+  margin-bottom: 16px;
+}
+.question-input:focus { outline: none; border-color: var(--gold-soft); }
+.question-input::placeholder { color: var(--text-muted); }
+
+.deck-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 18px auto 0;
+  padding: 6px 14px;
+  border: 1px solid var(--gold-soft);
+  border-radius: 999px;
+  color: var(--gold);
+  font-family: 'Spectral', serif;
+  font-style: italic;
+  font-size: 13px;
+  width: fit-content;
+}
+
 .spread-picker {
   display: flex;
   flex-wrap: wrap;
