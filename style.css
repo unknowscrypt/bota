@@ -101,6 +101,35 @@ main { position: relative; z-index: 1; }
   max-width: 46ch;
 }
 
+.subtabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.subtab {
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--text-muted);
+  border-radius: 10px;
+  padding: 10px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color .2s ease, color .2s ease;
+}
+
+.subtab.is-active {
+  border-color: var(--gold-soft);
+  color: var(--gold);
+  background: var(--panel-raised);
+}
+
+.subscreen { display: none; }
+.subscreen.is-active { display: block; animation: fadeIn .3s ease; }
+
 /* ---- Tarot ---- */
 
 .question-input {

@@ -26,25 +26,46 @@
 
   <!-- ===== TAROT ===== -->
   <section id="tarot" class="screen is-active">
-    <p class="lede">Опиши свой вопрос — я подберу подходящую колоду под тему — и выбери расклад.</p>
 
-    <textarea class="question-input" id="questionInput" rows="2"></textarea>
-
-    <div class="spread-picker" id="spreadPicker">
-      <button class="chip is-active" data-spread="one_card">Карта дня</button>
-      <button class="chip" data-spread="three_cards">Прошлое · Настоящее · Будущее</button>
-      <button class="chip" data-spread="situation">Ситуация · Совет · Итог</button>
-      <button class="chip" data-spread="celtic_cross">Кельтский крест</button>
+    <div class="subtabs" id="subtabs">
+      <button class="subtab is-active" data-subtab="daily">Карта дня</button>
+      <button class="subtab" data-subtab="question">Расклад по вопросу</button>
     </div>
 
-    <button class="draw-button" id="drawButton">
-      <span class="draw-button-glyph">✦</span>
-      <span>Раскрыть карты</span>
-    </button>
+    <!-- Карта дня: без вопроса, один тап -->
+    <div id="dailyScreen" class="subscreen is-active">
+      <p class="lede">Один тап — одна карта на сегодня, без лишних раздумий.</p>
 
-    <div class="deck-badge" id="deckBadge" hidden></div>
-    <div class="cards-row" id="cardsRow"></div>
-    <div class="ai-interpretation" id="aiInterpretation" hidden></div>
+      <button class="draw-button" id="dailyButton">
+        <span class="draw-button-glyph">✦</span>
+        <span>Вытянуть карту дня</span>
+      </button>
+
+      <div class="cards-row" id="dailyCardRow"></div>
+    </div>
+
+    <!-- Расклад по вопросу: с текстом вопроса и выбором расклада -->
+    <div id="questionScreen" class="subscreen">
+      <p class="lede">Опиши свой вопрос — подберу подходящую колоду под тему — и выбери расклад.</p>
+
+      <textarea class="question-input" id="questionInput" rows="2"></textarea>
+
+      <div class="spread-picker" id="spreadPicker">
+        <button class="chip is-active" data-spread="three_cards">Прошлое · Настоящее · Будущее</button>
+        <button class="chip" data-spread="situation">Ситуация · Совет · Итог</button>
+        <button class="chip" data-spread="celtic_cross">Кельтский крест</button>
+      </div>
+
+      <button class="draw-button" id="drawButton">
+        <span class="draw-button-glyph">✦</span>
+        <span>Раскрыть карты</span>
+      </button>
+
+      <div class="deck-badge" id="deckBadge" hidden></div>
+      <div class="cards-row" id="cardsRow"></div>
+      <div class="ai-interpretation" id="aiInterpretation" hidden></div>
+    </div>
+
   </section>
 
   <!-- ===== MATRIX ===== -->

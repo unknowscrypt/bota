@@ -21,14 +21,63 @@ function activateTab(name) {
 tabs.forEach(t => t.addEventListener("click", () => activateTab(t.dataset.tab)));
 window.addEventListener("load", () => positionUnderline(document.querySelector(".tab.is-active")));
 
-/* ---------- Tarot ---------- */
+/* ---------- Tarot subtabs ---------- */
+const subtabs = document.querySelectorAll(".subtab");
+subtabs.forEach(t => t.addEventListener("click", () => {
+  subtabs.forEach(s => s.classList.toggle("is-active", s === t));
+  document.querySelectorAll(".subscreen").forEach(s =>
+    s.classList.toggle("is-active", s.id === `${t.dataset.subtab}Screen`));
+}));
+
+/* ---------- Shared card renderer ---------- */
+function renderCard(container, c, i) {
+  const card = document.createElement("div");
+  card.className = "tarot-card";
+  card.innerHTML = `
+    <div class="tarot-card-position">${c.position}</div>
+    <div class="tarot-card-inner">
+      <div class="tarot-card-face tarot-card-back"><span class="draw-button-glyph tarot-card-back-glyph">✦</span></div>
+      <div class="tarot-card-face tarot-card-front">
+        <div class="tarot-card-emoji">${c.emoji}</div>
+        <div class="tarot-card-name">${c.card}</div>
+        ${c.reversed ? '<span class="tarot-card-reversed-tag">перевёрнута</span>' : ""}
+        <div class="tarot-card-meaning">${c.meaning}</div>
+      </div>
+    </div>`;
+  container.appendChild(card);
+  setTimeout(() => {
+    card.classList.add("is-flipped");
+    tg?.HapticFeedback?.impactOccurred("medium");
+  }, 250 + i * 220);
+}
+
+/* ---------- Daily card ---------- */
+const dailyButton = document.getElementById("dailyButton");
+const dailyCardRow = document.getElementById("dailyCardRow");
+
+dailyButton.addEventListener("click", async () => {
+  dailyButton.disabled = true;
+  dailyCardRow.innerHTML = "";
+  tg?.HapticFeedback?.impactOccurred("light");
+  try {
+    const res = await fetch(`${API}/api/tarot/draw?spread=one_card`);
+    const data = await res.json();
+    data.cards.forEach((c, i) => renderCard(dailyCardRow, c, i));
+  } catch (err) {
+    dailyCardRow.innerHTML = `<p class="lede">Не удалось вытянуть карту. Попробуй ещё раз.</p>`;
+  } finally {
+    dailyButton.disabled = false;
+  }
+});
+
+/* ---------- Question + spread ---------- */
 const spreadPicker = document.getElementById("spreadPicker");
 const drawButton = document.getElementById("drawButton");
 const cardsRow = document.getElementById("cardsRow");
 const questionInput = document.getElementById("questionInput");
 const deckBadge = document.getElementById("deckBadge");
 const aiInterpretation = document.getElementById("aiInterpretation");
-let currentSpread = "one_card";
+let currentSpread = "three_cards";
 
 const EXAMPLE_QUESTIONS = [
   "Почему я не могу отпустить эти отношения?",
@@ -70,26 +119,7 @@ drawButton.addEventListener("click", async () => {
     const data = await res.json();
     deckBadge.hidden = false;
     deckBadge.textContent = `✦ ${data.deck}`;
-    data.cards.forEach((c, i) => {
-      const card = document.createElement("div");
-      card.className = "tarot-card";
-      card.innerHTML = `
-        <div class="tarot-card-position">${c.position}</div>
-        <div class="tarot-card-inner">
-          <div class="tarot-card-face tarot-card-back"><span class="draw-button-glyph tarot-card-back-glyph">✦</span></div>
-          <div class="tarot-card-face tarot-card-front">
-            <div class="tarot-card-emoji">${c.emoji}</div>
-            <div class="tarot-card-name">${c.card}</div>
-            ${c.reversed ? '<span class="tarot-card-reversed-tag">перевёрнута</span>' : ""}
-            <div class="tarot-card-meaning">${c.meaning}</div>
-          </div>
-        </div>`;
-      cardsRow.appendChild(card);
-      setTimeout(() => {
-        card.classList.add("is-flipped");
-        tg?.HapticFeedback?.impactOccurred("medium");
-      }, 250 + i * 220);
-    });
+    data.cards.forEach((c, i) => renderCard(cardsRow, c, i));
 
     const revealDelay = 250 + data.cards.length * 220 + 400;
     setTimeout(() => {
